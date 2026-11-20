@@ -1,0 +1,10 @@
+# VSCP Blinky demo defaults. Put local settings (Wi-Fi SSID/password,
+# MQTT broker ...) in sdkconfig.defaults.local, which is not committed.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+# 1.5 MB app partition (Wi-Fi + MQTT is about 1 MB)
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+CONFIG_FREERTOS_HZ=1000
+CONFIG_LWIP_SO_RCVBUF=y
+CONFIG_LWIP_IGMP=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096
+CONFIG_LWIP_MAX_SOCKETS=16

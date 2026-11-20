@@ -1,0 +1,153 @@
+menu "VSCP Blinky"
+
+    menu "Wi-Fi"
+        config BLINKY_WIFI_SSID
+            string "SSID"
+            default ""
+            help
+                Wi-Fi network to join. Set it in sdkconfig.defaults.local
+                (not committed) or with idf.py menuconfig.
+
+        config BLINKY_WIFI_PASSWORD
+            string "Password"
+            default ""
+    endmenu
+
+    menu "Board"
+        config BLINKY_LED_GPIO
+            int "LED GPIO"
+            range 0 48
+            default 2
+            help
+                GPIO for the LED. Most ESP32 DevKit boards have a blue LED on GPIO2.
+
+        config BLINKY_LED_ACTIVE_HIGH
+            bool "LED is lit when the GPIO is high"
+            default y
+
+        config BLINKY_BUTTON_GPIO
+            int "Button GPIO"
+            range 0 48
+            default 0
+            help
+                GPIO for the button. GPIO0 is the BOOT button on most ESP32 boards.
+                The button pulls the GPIO low when it is pressed.
+    endmenu
+
+    menu "VSCP link protocol (TCP/IP)"
+        config BLINKY_LINK_ENABLE
+            bool "Enable the VSCP link protocol server"
+            default y
+
+        config BLINKY_LINK_PORT
+            int "Port"
+            default 9598
+            depends on BLINKY_LINK_ENABLE
+
+        config BLINKY_LINK_MAX_CLIENTS
+            int "Max number of clients at the same time"
+            range 1 8
+            default 3
+            depends on BLINKY_LINK_ENABLE
+
+        config BLINKY_LINK_USER
+            string "User"
+            default "vscp"
+            depends on BLINKY_LINK_ENABLE
+
+        config BLINKY_LINK_PASSWORD
+            string "Password"
+            default "secret"
+            depends on BLINKY_LINK_ENABLE
+    endmenu
+
+    menu "UDP"
+        config BLINKY_UDP_ENABLE
+            bool "Send and receive VSCP frames over UDP"
+            default y
+
+        config BLINKY_UDP_PORT
+            int "Port (local and remote)"
+            default 33333
+            depends on BLINKY_UDP_ENABLE
+
+        config BLINKY_UDP_REMOTE_HOST
+            string "Send to (IPv4 address)"
+            default "255.255.255.255"
+            depends on BLINKY_UDP_ENABLE
+            help
+                Events from the node are sent here. The default is the broadcast
+                address, so every host on the local network gets them.
+    endmenu
+
+    menu "Multicast"
+        config BLINKY_MULTICAST_ENABLE
+            bool "Send and receive VSCP frames on the VSCP multicast group"
+            default y
+
+        config BLINKY_MULTICAST_GROUP
+            string "Group"
+            default "224.0.23.158"
+            depends on BLINKY_MULTICAST_ENABLE
+
+        config BLINKY_MULTICAST_PORT
+            int "Port"
+            default 44444
+            depends on BLINKY_MULTICAST_ENABLE
+
+        config BLINKY_MULTICAST_TTL
+            int "TTL"
+            range 1 255
+            default 1
+            depends on BLINKY_MULTICAST_ENABLE
+    endmenu
+
+    menu "MQTT"
+        config BLINKY_MQTT_ENABLE
+            bool "Publish and receive VSCP JSON events over MQTT"
+            default n
+
+        config BLINKY_MQTT_URI
+            string "Broker URI"
+            default "mqtt://192.168.1.9:1883"
+            depends on BLINKY_MQTT_ENABLE
+
+        config BLINKY_MQTT_USER
+            string "User"
+            default ""
+            depends on BLINKY_MQTT_ENABLE
+
+        config BLINKY_MQTT_PASSWORD
+            string "Password"
+            default ""
+            depends on BLINKY_MQTT_ENABLE
+
+        config BLINKY_MQTT_PUBLISH_TOPIC
+            string "Publish topic"
+            default "vscp/{guid}/{class}/{type}"
+            depends on BLINKY_MQTT_ENABLE
+            help
+                Topic for events from the node. {guid}, {class} and {type} are
+                replaced by the node GUID (FF:FF:...) and the event class and type.
+
+        config BLINKY_MQTT_SUBSCRIBE_TOPIC
+            string "Subscribe topic"
+            default "vscp/{guid}/in"
+            depends on BLINKY_MQTT_ENABLE
+            help
+                Events (VSCP JSON) published here are handled by the node.
+                {guid} is replaced by the node GUID.
+    endmenu
+
+    menu "Time"
+        config BLINKY_SNTP_ENABLE
+            bool "Get the time with SNTP (event timestamps)"
+            default y
+
+        config BLINKY_SNTP_SERVER
+            string "SNTP server"
+            default "pool.ntp.org"
+            depends on BLINKY_SNTP_ENABLE
+    endmenu
+
+endmenu

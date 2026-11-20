@@ -1,0 +1,6 @@
+# Copy to sdkconfig.defaults.local (not committed) and edit, then
+# delete sdkconfig (or run idf.py reconfigure) so the values are used.
+CONFIG_BLINKY_WIFI_SSID="ssid"
+CONFIG_BLINKY_WIFI_PASSWORD="password"
+CONFIG_BLINKY_MQTT_ENABLE=y
+CONFIG_BLINKY_MQTT_URI="mqtt://192.168.1.7:1883"

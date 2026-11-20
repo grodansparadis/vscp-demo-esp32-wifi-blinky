@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        idf: ["v6.0", "v6.1"]
+        mqtt: ["n", "y"]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Enable MQTT
+        if: matrix.mqtt == 'y'
+        run: echo "CONFIG_BLINKY_MQTT_ENABLE=y" > sdkconfig.defaults.local
+      - name: Build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: ${{ matrix.idf }}
+          target: esp32

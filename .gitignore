@@ -1,0 +1,9 @@
+build/
+managed_components/
+sdkconfig
+sdkconfig.old
+# Local settings (Wi-Fi credentials, broker address ...), see README
+sdkconfig.defaults.local
+*.bin
+__pycache__/
+.vscode/
