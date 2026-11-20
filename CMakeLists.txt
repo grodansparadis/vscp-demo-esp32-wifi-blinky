@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 3.16)
 include(FetchContent)
 FetchContent_Declare(
     vscp_firmware
-    URL https://codeload.github.com/grodansparadis/vscp-firmware/tar.gz/58195ab857ccaec319827d48d712e5f149725523
-    URL_HASH SHA256=1b57ec2cc175bd4c88f07ea9a2058154bc658d5368b1726d59d4261ddeca05e1
+    URL https://codeload.github.com/grodansparadis/vscp-firmware/tar.gz/f8bc40d0585df638ef7f742ff25106920acc3277
+    URL_HASH SHA256=d33c3c64f02b4877fd9753cad2834d206028cc3ebdd2afa00621dd21d85de94b
     SOURCE_SUBDIR __sources_only__
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )

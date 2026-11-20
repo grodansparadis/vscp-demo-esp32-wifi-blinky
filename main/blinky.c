@@ -78,6 +78,7 @@ static uint32_t s_last_blink; // Time of the last blink toggle
 static int s_save_pending;   // Registers changed and not saved yet
 static uint32_t s_save_time; // Time of the last change
 static volatile int s_restart_requested;
+static volatile uint32_t s_ip_addr; // IPv4 address, network byte order (set by the Wi-Fi code)
 
 static volatile uint32_t s_counter; // Millisecond counter (registers 6-9)
 static volatile int s_counter_wrapped;
@@ -107,6 +108,12 @@ const uint8_t *
 vscp_core_guid(void)
 {
   return s_fw.guid;
+}
+
+void
+vscp_core_set_ip(uint32_t addr)
+{
+  s_ip_addr = addr; // Copied to the firmware context by the core task
 }
 
 void
@@ -629,7 +636,16 @@ static const vscp_frmw2_ops_t s_fw_ops = {
 static void
 core_task(void *arg)
 {
+  uint32_t ip = 0;
   for (;;) {
+    // IP address for the capabilities event: IPv4 in the first four bytes,
+    // MSB first, the rest zero (as the VSCP daemon does)
+    if (ip != s_ip_addr) {
+      ip = s_ip_addr;
+      memset(s_fw.ipaddr, 0, sizeof(s_fw.ipaddr));
+      memcpy(s_fw.ipaddr, (const void *) &ip, 4); // Network byte order is MSB first
+    }
+
     vscp_event_t *pev = NULL;
     if (pdTRUE == xQueueReceive(s_queue, &pev, pdMS_TO_TICKS(CORE_LOOP_MS))) {
       // Protocol events (register read/write, ...) and the decision matrix

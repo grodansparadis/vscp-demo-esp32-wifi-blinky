@@ -7,6 +7,8 @@ tagged, rename **Unreleased** to the version and date, and start a new
 
 ## Unreleased
 
+- The capabilities event (CLASS2.PROTOCOL 1024/20) has the IP address of the node (it was all zero): IPv4 in bytes 24-27, MSB first
+- vscp-firmware f8bc40d: the capabilities event no longer claims SSL support
 - First version: the VSCP Blinky node (LED, button, millisecond counter, four row decision matrix, registers saved in NVS) on an ESP32 with Wi-Fi
 - Transports, all at the same time: VSCP link protocol server (TCP/IP, several clients), VSCP frames over UDP and on the VSCP multicast group, VSCP JSON events over MQTT
 - GUID from the Wi-Fi MAC address, event time from SNTP

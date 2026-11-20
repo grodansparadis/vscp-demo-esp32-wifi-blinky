@@ -114,6 +114,15 @@ const uint8_t *
 vscp_core_guid(void);
 
 /*!
+  Set the IPv4 address of the node (sent in the capabilities event).
+
+  @param addr IPv4 address in network byte order (esp_ip4_addr_t.addr),
+              0 when the node has no address.
+*/
+void
+vscp_core_set_ip(uint32_t addr);
+
+/*!
   Save pending register changes and restart the node (from the core task).
 */
 void

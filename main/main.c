@@ -41,6 +41,7 @@ wifi_event_handler(void *arg, esp_event_base_t base, int32_t id, void *data)
   }
   else if ((WIFI_EVENT == base) && (WIFI_EVENT_STA_DISCONNECTED == id)) {
     xEventGroupClearBits(s_wifi_events, WIFI_CONNECTED_BIT);
+    vscp_core_set_ip(0);
     ESP_LOGW(TAG, "Wi-Fi disconnected, connecting again");
     vTaskDelay(pdMS_TO_TICKS(1000));
     esp_wifi_connect();
@@ -48,6 +49,7 @@ wifi_event_handler(void *arg, esp_event_base_t base, int32_t id, void *data)
   else if ((IP_EVENT == base) && (IP_EVENT_STA_GOT_IP == id)) {
     ip_event_got_ip_t *event = (ip_event_got_ip_t *) data;
     ESP_LOGI(TAG, "Got IP address " IPSTR, IP2STR(&event->ip_info.ip));
+    vscp_core_set_ip(event->ip_info.ip.addr);
     xEventGroupSetBits(s_wifi_events, WIFI_CONNECTED_BIT);
   }
 }
