@@ -7,3 +7,7 @@ sdkconfig.defaults.local
 *.bin
 __pycache__/
 .vscode/
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
